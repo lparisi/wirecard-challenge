@@ -3,22 +3,55 @@
 
 venv/
 
-api/models/__pycache__/
+ Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
 
-api/models/__init__\.py
+# C extensions
+*.so
 
-api/models/__init__\.pyc
+# Distribution / packaging
+bin/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
 
-api/models/boleto\.pyc
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
 
-api/models/buyer\.pyc
+# Unit test / coverage reports
+.tox/
+.coverage
+.cache
+nosetests.xml
+coverage.xml
 
-api/models/card\.pyc
+# Translations
+*.mo
 
-api/models/payment\.pyc
+# Mr Developer
+.mr.developer.cfg
+.project
+.pydevproject
 
-api/resources/__pycache__/
+# Rope
+.ropeproject
 
-*.pyc
+# Django stuff:
+*.log
+*.pot
+
+# Sphinx documentation
+docs/_build/
 
 example request
