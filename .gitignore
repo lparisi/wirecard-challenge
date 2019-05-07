@@ -22,3 +22,5 @@ api/resources/__pycache__/
 *.pyc
 
 example request
+
+api/resources/payment\.py

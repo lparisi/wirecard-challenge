@@ -42,7 +42,7 @@ class CreatePayment(Resource):
                 year = year,
                 cvc = cvc
             ) 
-            if picard.is_valid and not picard.is_expired:
+            if picard.is_valid and not picard.is_expired and not None:
                 u_id = str(uuid.uuid1()) #unique payment ID
                 
                 # Everything needs to be inserted here.
