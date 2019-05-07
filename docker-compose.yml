@@ -1,0 +1,16 @@
+version: '2'
+services:
+    small:
+        build: .
+        container_name: wirecard-api
+        volumes:
+          - .:/flask-project
+        working_dir: /flask-project/api
+        #command: python app.py
+        expose:
+          - 5000
+        ports:
+          - 5000:5000
+        environment:
+            PORT: 5000
+            SQLALCHEMY_DATABASE_URI: sqlite:///data.db
