@@ -24,51 +24,49 @@ Subsequent response definitions will only detail the expected value of the `data
 - `200 OK` on success
 
 ```json
-{   {   "id":82,
-        "amount":1.00,
-        "type":"BOLETO",
-        "status":"APPROVED",
-        "client":{"id":1},
-        "buyer":{   "name":"Miguel",
-                    "email":"email@email.com",
-                    "cpf":"32014080003"},
-        "card":null,
-        "boleto":{"id":83,
-        "number":"34191790010104355872392553590008878710000100"
+{
+    "PaymentsRecords": [
+        {
+            "boleto": [],
+            "card": [
+                {
+                    "cvc": 1213,
+                    "month": 7,
+                    "number": "4444333322221111",
+                    "year": 2042
+                }
+            ],
+            "cpf": "11555134609",
+            "email": "renato@email.com",
+            "name": "Renato Almeida",
+            "payment": [
+                {
+                    "amount": 90.5,
+                    "type": "credit_card",
+                    "u_id": "f49d656b-710d-11e9-ad10-685b357c6685"
+                }
+            ]
+        },
+        {
+            "boleto": [
+                {
+                    "number": "514063144412920996301392351456658136409509526996"
+                }
+            ],
+            "card": [],
+            "cpf": "33723404855",
+            "email": "dustydrums@strokes.com",
+            "name": "Julian Casablancas",
+            "payment": [
+                {
+                    "amount": 254.37,
+                    "type": "boleto",
+                    "u_id": "e6356526-7110-11e9-877e-685b357c6685"
+                }
+            ]
         }
-    },
-    {
-        "id":86,
-        "amount":1000.58,
-        "type":"CREDIT_CARD",
-        "status":"APPROVED",
-        "client":{"id":1},
-        "buyer":{"name":"Miguel",
-        "email":"email@gmail.com",
-        "cpf":"82613833009"},
-        "card":{"id":85,
-        "holderName":"Welligton Miguel",
-        "number":"5477239667148925",
-        "expiryDate":"2020-12-28",
-        "cvv":"793"},
-        "boleto":null
-    },
-    {
-        "id":89,
-        "amount":100.00,
-        "type":"CREDIT_CARD",
-        "status":"APPROVED",
-        "client":{"id":1},
-        "buyer":{"name":"Name Buyer",
-        "email":"email@email.com",
-        "cpf":"51170898041"},
-        "card":{"id":88,
-        "holderName":"Welligton Miguel",
-        "number":"4929340466625068",
-        "expiryDate":"2019-05-25",
-        "cvv":"12"},
-        "boleto":null
-    },
+    ]
+}       
 }...
 ```
 
@@ -81,7 +79,6 @@ Subsequent response definitions will only detail the expected value of the `data
 
 **Arguments:**
 
-- `"id:string`     a globally unique identifier for this payment.
 - `"amount:float` the payment amount
 - `"type:string`   payment that can be either boleto or credit card.
 - `"status:string` the payment can approved, pending or declined.
@@ -91,12 +88,37 @@ Subsequent response definitions will only detail the expected value of the `data
   - `"email": string` buyer email address
   - `"cpf": string` buyer social security number (CPF)
 - `"card"`: nesting credit card information
-  - `"card_id": string`: an identifier for the credit card BIN (Bank Identification Number)
   - `"card_holderName": string` Cardholder's name
   - `"card_number": string` Credit Card number
   - `"card_expDate": string` Credit Card Expiry date
   - `"card_cvv": string` Credit Card Verification Value
-- `"boleto": string` unique identifier for boleto payment
+
+### Request for Credit Card Payment
+**Request**
+```json
+{
+    "client": {
+        "id": 1
+    },
+    "buyer": {
+        "name": "Julian Casablancas",
+        "email": "dustydrums@strokes.com",
+        "cpf": 33723404855
+    },
+    "payment": {
+        "amount": 254.37,
+        "type": "boleto",
+        "card": {
+            "cardNumber": "",
+            "holderName": "",
+            "month": "",
+            "year": "",
+            "cvv": ""
+        }
+    }
+}
+```
+
 
 ### Response for Credit Card Payment
 
@@ -106,9 +128,8 @@ Subsequent response definitions will only detail the expected value of the `data
 
 ```json
 {
-    {
-        "id":42,
-        "status":"Approved"}
+    "response": "Payment added successfuly!",
+    "status": "Approved"
 }
 ```
 
@@ -119,7 +140,10 @@ Subsequent response definitions will only detail the expected value of the `data
 - `201 Created` on success
 
 ```json
-{   "boleto":                       {"number":"34191790010104351004791020150008178710026000"}
+{   "boleto":
+        {
+        "boleto_number":"288881905123923272040005888782304971646982007844"
+        }
 }
 ```
 
@@ -137,18 +161,26 @@ Subsequent response definitions will only detail the expected value of the `data
 
 ```json
 {
-    {"id":86,
-    "amount":260.00,
-    "type":"BOLETO",
-    "status":"APPROVED",
-    "client":{"id":1},
-    "buyer":{   "name":"Miguel",
-                "email":"email@email.com",
-                "cpf":"32014080003"},
-    "card":null,
-    "boleto":{"id":83,
-    "number":"34191790010104351004791020150008178710026000",
-    }
+    "PaymentsRecords": [
+        {
+            "boleto": [
+                {
+                    "number": "514063144412920996301392351456658136409509526996"
+                }
+            ],
+            "card": [],
+            "cpf": "33723404855",
+            "email": "dustydrums@strokes.com",
+            "name": "Julian Casablancas",
+            "payment": [
+                {
+                    "amount": 254.37,
+                    "type": "boleto",
+                    "u_id": "e6356526-7110-11e9-877e-685b357c6685"
+                }
+            ]
+        }
+    ]
 }
 ```
 
@@ -157,21 +189,31 @@ Subsequent response definitions will only detail the expected value of the `data
 - `200 OK` on success
 
 ```json
-[
-    {   "id":82,
-        "amount":1.00,
-        "type":"BOLETO",
-        "status":"APPROVED",
-        "client":{"id":1},
-        "buyer":{   "name":"Miguel",
-                    "email":"email@email.com",
-                    "cpf":"32014080003"},
-        "card":null,
-        "boleto":{"id":83,
-        "number":"34191790010104355872392553590008878710000100"
-        }
-    },
-]
+{
+"PaymentsRecords": [
+    {   
+        "boleto": [],
+        "card": [
+            {
+                "cvc": 1213,
+                "month": 7,
+                "number": "4444333322221111",
+                "year": 2042
+            }
+        ],
+        "cpf": "11555134609",
+        "email": "renato@email.com",
+        "name": "Renato Almeida",
+        "payment": [
+            {
+                "amount": 90.5,
+                "type": "credit_card",
+                "u_id": "f49d656b-710d-11e9-ad10-685b357c6685"
+            }
+        ]
+    }
+    ]
+}
 ```
 
 

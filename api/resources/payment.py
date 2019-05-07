@@ -46,45 +46,53 @@ class CreatePayment(Resource):
                 u_id = str(uuid.uuid1()) #unique payment ID
                 
                 # Everything needs to be inserted here.
-                buyer_ = BuyerModel.find_by_id(id)
+                buyer_ = BuyerModel.find_by_email(email)
                 if buyer_:
                     crd = CardModel(cardnumber , month , year , cvc , buyer_.id)
                     crd.save_to_db()
                     PaymentModel(u_id,amount, type , buyer_.id, crd.id , None).save_to_db()
-                    return {'response': 'Payment added successfuly!'}, 201
+                    return {
+                        'response': 'Payment added successfuly!',
+                        'status':'Approved'
+                        }, 201
                 else:
                     BuyerModel(name , email, cpf).save_to_db()
-                    buyer_ = BuyerModel.find_by_id(id)   
+                    buyer_ = BuyerModel.find_by_email(email)   
                     crd = CardModel(cardnumber , month , year , cvc , buyer_.id)
                     crd.save_to_db()
                     PaymentModel(u_id, amount, type , buyer_.id, crd.id , None).save_to_db()
 
-                    return {'response': 'Payment added successfuly!'}, 201
+                    return {
+                        'response': 'Payment added successfuly!',
+                        'status':'Approved'
+                        }, 201
                 
             else:
-                return {'response':'Card information is incorrect'},400
+                return {'response':'Card information is incorrect',
+                        'status': 'Declined'
+                       },400
 
         elif safe_str_cmp(type , 'boleto'):   
             u_id = str(uuid.uuid1())
             boleto_number = random.randint(100000000000000000000000000000000000000000000000,999999999999999999999999999999999999999999999999)
             boleto_str = str(boleto_number)
-            buyer_ = BuyerModel.find_by_id(id)
+            buyer_ = BuyerModel.find_by_email(email)
             if buyer_:
                 blt = BoletoModel(boleto_str, buyer_.id)
                 blt.save_to_db()
                 PaymentModel(u_id , amount, type , buyer_.id, None, blt.id ).save_to_db()
-                return {'response': 'Payment added successfuly!',
+                return {
                         'boleto':{
                             'boleto_number': boleto_str
                         }
                     }, 201
             else:
                 BuyerModel(name , email, cpf).save_to_db()
-                buyer_ = BuyerModel.find_by_id(id)   
+                buyer_ = BuyerModel.find_by_email(email)   
                 blt = BoletoModel(boleto_str, buyer_.id)
                 blt.save_to_db()
                 PaymentModel(u_id , amount, type , buyer_.id, None, blt.id ).save_to_db()
-                return {'response': 'Payment added successfuly!',
+                return {
                         'boleto':{
                             'boleto_number': boleto_str
                         }

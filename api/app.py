@@ -15,7 +15,7 @@ def create_tables():
     db.create_all()
 
 api.add_resource(CreatePayment, '/payments')
-api.add_resource(GetPayment, '/payment/<int:id>')
+api.add_resource(GetPayment, '/payments/<int:id>')
 api.add_resource(ListPayments, '/payments')
 
 if __name__ == '__main__':

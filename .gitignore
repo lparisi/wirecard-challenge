@@ -20,3 +20,5 @@ api/models/payment\.pyc
 api/resources/__pycache__/
 
 *.pyc
+
+example request
