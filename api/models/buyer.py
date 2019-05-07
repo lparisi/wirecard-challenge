@@ -20,9 +20,9 @@ class BuyerModel(db.Model):
     def json(self):
         return {
                 'name':self.name , 'email':self.email ,'cpf':self.cpf ,
+                'payment':[p.json() for p in self.payment.all()],
                 'card':[c.json() for c in self.card.all()],
-                'boleto': [b.json() for b in self.boleto.all()],
-                'payment':[p.json() for p in self.payment.all()]
+                'boleto': [b.json() for b in self.boleto.all()]
             }
 
     def save_to_db(self):
@@ -33,5 +33,8 @@ class BuyerModel(db.Model):
     def find_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
         
-
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.query.filter_by(id=id).first()
+        
         

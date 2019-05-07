@@ -9,9 +9,12 @@ from models.boleto import BoletoModel
 import random
 import uuid
 
-class Payment(Resource):
+class CreatePayment(Resource):
     def post(self):
         data = request.get_json()
+
+        #client information
+        client_id = data['client']['id']
 
         #buyer information
         name = data['buyer']['name']
@@ -25,7 +28,7 @@ class Payment(Resource):
         type = data['payment']['type'].lower()
         amount = data['payment']['amount']
 
-        if safe_str_cmp(type , 'credit_card'):
+        if safe_str_cmp(type , 'credit_card'): #check if the payment method is 'credit_card'
 
             cardnumber = data['payment']['card']['cardNumber']
             holderName = data['payment']['card']['holderName']
@@ -40,10 +43,10 @@ class Payment(Resource):
                 cvc = cvc
             ) 
             if picard.is_valid and not picard.is_expired:
-                u_id = str(uuid.uuid1())
+                u_id = str(uuid.uuid1()) #unique payment ID
                 
                 # Everything needs to be inserted here.
-                buyer_ = BuyerModel.find_by_email(email)
+                buyer_ = BuyerModel.find_by_id(id)
                 if buyer_:
                     crd = CardModel(cardnumber , month , year , cvc , buyer_.id)
                     crd.save_to_db()
@@ -51,7 +54,7 @@ class Payment(Resource):
                     return {'response': 'Payment added successfuly!'}, 201
                 else:
                     BuyerModel(name , email, cpf).save_to_db()
-                    buyer_ = BuyerModel.find_by_email(email)   
+                    buyer_ = BuyerModel.find_by_id(id)   
                     crd = CardModel(cardnumber , month , year , cvc , buyer_.id)
                     crd.save_to_db()
                     PaymentModel(u_id, amount, type , buyer_.id, crd.id , None).save_to_db()
@@ -65,27 +68,33 @@ class Payment(Resource):
             u_id = str(uuid.uuid1())
             boleto_number = random.randint(100000000000000000000000000000000000000000000000,999999999999999999999999999999999999999999999999)
             boleto_str = str(boleto_number)
-            buyer_ = BuyerModel.find_by_email(email)
+            buyer_ = BuyerModel.find_by_id(id)
             if buyer_:
                 blt = BoletoModel(boleto_str, buyer_.id)
                 blt.save_to_db()
                 PaymentModel(u_id , amount, type , buyer_.id, None, blt.id ).save_to_db()
-                return {'response': 'Payment added successfuly!'}, 201
+                return {'response': 'Payment added successfuly!',
+                        'boleto':{
+                            'boleto_number': boleto_str
+                        }
+                    }, 201
             else:
                 BuyerModel(name , email, cpf).save_to_db()
-                buyer_ = BuyerModel.find_by_email(email)   
+                buyer_ = BuyerModel.find_by_id(id)   
                 blt = BoletoModel(boleto_str, buyer_.id)
                 blt.save_to_db()
                 PaymentModel(u_id , amount, type , buyer_.id, None, blt.id ).save_to_db()
-                return {'response': 'Payment added successfuly!'}, 201
+                return {'response': 'Payment added successfuly!',
+                        'boleto':{
+                            'boleto_number': boleto_str
+                        }
+                    }, 201
 
-
-
-class SinglePayment(Resource):
+class GetPayment(Resource):
     def get(self, id):
-        return {'PaymentsRecords': [buyer.json() for buyer in BuyerModel.query.filter_by(id=id).all()]}
+        return {'PaymentsRecords': [buyer.json() for buyer in BuyerModel.query.filter_by(id=id).all()]}, 200
 
-class PaymentList(Resource):
+class ListPayments(Resource):
     def get(self):
-        return {'PaymentsRecords': [buyer.json() for buyer in BuyerModel.query.all()]}
+        return {'PaymentsRecords': [buyer.json() for buyer in BuyerModel.query.all()]}, 200
       
