@@ -1,5 +1,21 @@
 # Wirecard Challenge Payment Registry Service
+## How to run:
 
+### Locally:
+```code
+Using virtualenv to manage the dependencies
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python api/app.py
+
+```
+
+###Docker:
+```code
+docker build --rm -f "Dockerfile" -t wirecard-api .    #to build
+docker-compose -f "docker-compose.yml" up -d --build       #to run
+```
 ## Usage
 
 All responses will have the form

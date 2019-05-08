@@ -1,15 +1,4 @@
 Flask==1.0.2
 Flask_SQLAlchemy==2.4.0
-#Werkzeug==0.15.2
-Flask==1.0.2
-#Cython==0.29.7
-#pyOpenSSL==19.0.0
-#cryptography==2.6.1
 flask_restful==0.3.7
-protobuf==3.7.1
-#ipaddr==2.2.0
-#lxml==4.3.3
-#numpy==1.16.3
-#ordereddict==1.1
-#wincertstore==0.2
 captain-pycard==0.9.11

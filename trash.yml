@@ -1,18 +1,16 @@
 version: '2'
 services:
-    wirecard-api:
+    wirecard-challenge:
         build: .
-        container_name: wirecard-challenge
+        container_name: wirecard-api
         volumes:
           - .:/flask-project
-        working_dir: /flask-project
-        command: flask run --host=0.0.0.0
+        working_dir: /flask-project/api
+        #command: python app.py
         expose:
           - 5000
         ports:
           - 5000:5000
         environment:
-            FLASK_APP: app.py
-            FLASK_DEBUG: 1
             PORT: 5000
             SQLALCHEMY_DATABASE_URI: sqlite:///data.db
