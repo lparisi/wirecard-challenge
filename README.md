@@ -11,7 +11,7 @@ python api/app.py
 
 ```
 
-###Docker:
+### Docker:
 ```code
 docker build --rm -f "Dockerfile" -t wirecard-api .    #to build
 docker-compose -f "docker-compose.yml" up -d --build       #to run

@@ -1,6 +1,6 @@
 import unittest
 from werkzeug.exceptions import NotFound
-from app import create_app, db
+from api import create_app, db
 from api.models import boleto, buyer, card, client, payment
 from .test_client import TestClient
 
